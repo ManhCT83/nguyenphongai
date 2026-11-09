@@ -1,0 +1,1 @@
+function searchPosts(){let q=document.getElementById("q").value.toLowerCase();document.querySelectorAll(".post").forEach(x=>x.style.display=x.innerText.toLowerCase().includes(q)?"block":"none")}
