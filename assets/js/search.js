@@ -1,0 +1,1 @@
+function searchSite(){let q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('.search-item').forEach(i=>i.style.display=i.innerText.toLowerCase().includes(q)?'block':'none')}
