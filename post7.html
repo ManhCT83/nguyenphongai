@@ -1,1 +1,561 @@
-<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quản Lý Khách Sạn Bằng Power Apps</title><meta name="description" content="Quản Lý Khách Sạn Bằng Power Apps"><style>body{font-family:Segoe UI,Arial;max-width:1000px;margin:auto;padding:20px;line-height:1.8}h1,h2{color:#0078d4}</style></head><body><h1>Quản Lý Khách Sạn Bằng Power Apps</h1><p>Bài viết thực chiến dành cho người mới bắt đầu và doanh nghiệp muốn ứng dụng AI.</p><h2>Tổng quan</h2><p>Chủ đề này đang được ứng dụng rộng rãi trong các doanh nghiệp để tăng năng suất, giảm chi phí và chuẩn hóa quy trình.</p><h2>Lợi ích chính</h2><ul><li>Tăng tốc công việc</li><li>Giảm thao tác thủ công</li><li>Nâng cao chất lượng đầu ra</li></ul><h2>Hướng dẫn triển khai</h2><p>Bắt đầu bằng việc xác định nhu cầu thực tế, lựa chọn công cụ phù hợp và triển khai thử nghiệm trên phạm vi nhỏ trước khi mở rộng.</p><h2>Ví dụ thực tế</h2><p>Doanh nghiệp có thể sử dụng giải pháp này để quản lý khách hàng, tự động hóa báo cáo, hỗ trợ chăm sóc khách hàng hoặc tạo nội dung nhanh hơn.</p><h2>Các sai lầm thường gặp</h2><ul><li>Triển khai quá nhanh khi chưa có quy trình</li><li>Không đào tạo người dùng</li><li>Không đo lường hiệu quả</li></ul><h2>Kết luận</h2><p>Quản Lý Khách Sạn Bằng Power Apps là một trong những giải pháp đáng cân nhắc để nâng cao hiệu quả làm việc trong kỷ nguyên AI. Hãy áp dụng từng bước và đo lường kết quả để đạt hiệu quả cao nhất.</p></body></html>
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Xây Dựng Ứng Dụng Quản Lý Khách Sạn Bằng Power Apps</title>
+
+<meta name="description"
+content="Hướng dẫn xây dựng ứng dụng quản lý khách sạn bằng Power Apps, Dataverse và Power Automate. Theo dõi ngày hết hạn, cảnh báo trước 10 ngày và quản lý tập trung.">
+
+<style>
+
+body{
+    font-family: Segoe UI, Arial, sans-serif;
+    max-width:1000px;
+    margin:auto;
+    padding:30px;
+    line-height:1.8;
+    color:#222;
+}
+
+h1,h2,h3{
+    color:#0078D4;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table,th,td{
+    border:1px solid #ddd;
+}
+
+th,td{
+    padding:12px;
+}
+
+.code{
+    background:#f5f5f5;
+    padding:15px;
+    border-radius:5px;
+    overflow:auto;
+    margin:15px 0;
+}
+
+.box{
+    background:#F5FAFF;
+    border-left:4px solid #0078D4;
+    padding:15px;
+    margin:20px 0;
+}
+
+.arch{
+    background:#fafafa;
+    border:1px solid #ddd;
+    padding:20px;
+    white-space:pre-line;
+    margin:15px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Xây Dựng Ứng Dụng Quản Lý Khách Sạn Bằng Power Apps</h1>
+
+<p>
+Nhiều doanh nghiệp hiện đang quản lý danh sách khách sạn bằng Excel.
+Trong giai đoạn đầu điều này có thể chấp nhận được nhưng khi số lượng khách sạn tăng lên,
+việc theo dõi ngày hết hạn, gia hạn hợp đồng và nhắc việc trở nên rất khó khăn.
+</p>
+
+<p>
+Power Apps là giải pháp phù hợp để xây dựng một hệ thống quản lý khách sạn đơn giản, chi phí thấp và triển khai nhanh.
+</p>
+
+<p>
+Trong bài viết này, chúng ta sẽ xây dựng ứng dụng có các chức năng:
+</p>
+
+<ul>
+
+<li>Quản lý danh sách khách sạn</li>
+
+<li>Quản lý ngày hết hạn</li>
+
+<li>Cảnh báo trước 10 ngày</li>
+
+<li>Tìm kiếm khách sạn</li>
+
+<li>Dashboard thống kê</li>
+
+<li>Gửi email tự động</li>
+
+</ul>
+
+<hr>
+
+<h2>Mục Lục</h2>
+
+<ul>
+
+<li>Bài toán thực tế</li>
+
+<li>Kiến trúc hệ thống</li>
+
+<li>Thiết kế dữ liệu Dataverse</li>
+
+<li>Tạo giao diện Power Apps</li>
+
+<li>Power Fx thực tế</li>
+
+<li>Tạo cảnh báo trước 10 ngày</li>
+
+<li>Dashboard quản lý</li>
+
+<li>Mở rộng hệ thống</li>
+
+<li>Kết luận</li>
+
+</ul>
+
+<hr>
+
+<h2>Bài Toán Thực Tế</h2>
+
+<p>
+Giả sử doanh nghiệp đang quản lý 300 khách sạn.
+</p>
+
+<p>
+Mỗi khách sạn có:
+</p>
+
+<ul>
+
+<li>Tên khách sạn</li>
+
+<li>Mã khách sạn</li>
+
+<li>Người phụ trách</li>
+
+<li>Ngày ký hợp đồng</li>
+
+<li>Ngày hết hạn</li>
+
+<li>Ghi chú</li>
+
+</ul>
+
+<p>
+Nếu chỉ quản lý bằng Excel:
+</p>
+
+<ul>
+
+<li>Dễ quên ngày hết hạn</li>
+
+<li>Khó tìm kiếm</li>
+
+<li>Không có cảnh báo tự động</li>
+
+<li>Không có dashboard</li>
+
+</ul>
+
+<hr>
+
+<h2>Kiến Trúc Hệ Thống</h2>
+
+<div class="arch">
+
+Power Apps
+
+↓
+
+Dataverse
+
+↓
+
+Power Automate
+
+↓
+
+Outlook / Teams
+
+↓
+
+Người quản lý
+
+</div>
+
+<p>
+Ứng dụng sẽ sử dụng Dataverse để lưu dữ liệu và Power Automate để thực hiện việc gửi thông báo.
+</p>
+
+<hr>
+
+<h2>Thiết Kế Dataverse</h2>
+
+<h3>Bảng KhachSan</h3>
+
+<table>
+
+<tr>
+<th>Tên Cột</th>
+<th>Kiểu Dữ Liệu</th>
+</tr>
+
+<tr>
+<td>MaKhachSan</td>
+<td>Text</td>
+</tr>
+
+<tr>
+<td>TenKhachSan</td>
+<td>Text</td>
+</tr>
+
+<tr>
+<td>NguoiPhuTrach</td>
+<td>Text</td>
+</tr>
+
+<tr>
+<td>DienThoai</td>
+<td>Text</td>
+</tr>
+
+<tr>
+<td>Email</td>
+<td>Text</td>
+</tr>
+
+<tr>
+<td>NgayKy</td>
+<td>Date</td>
+</tr>
+
+<tr>
+<td>NgayHetHan</td>
+<td>Date</td>
+</tr>
+
+<tr>
+<td>TrangThai</td>
+<td>Choice</td>
+</tr>
+
+<tr>
+<td>GhiChu</td>
+<td>Multiline Text</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Tạo Ứng Dụng Power Apps</h2>
+
+<p>
+Đăng nhập:
+</p>
+
+<div class="code">
+https://make.powerapps.com
+</div>
+
+<p>
+Tạo Canvas App mới và kết nối tới Dataverse.
+</p>
+
+<h3>Các Màn Hình Chính</h3>
+
+<ul>
+
+<li>Danh sách khách sạn</li>
+
+<li>Chi tiết khách sạn</li>
+
+<li>Thêm/Sửa thông tin</li>
+
+<li>Dashboard</li>
+
+</ul>
+
+<hr>
+
+<h2>Màn Hình Danh Sách Khách Sạn</h2>
+
+<p>
+Gallery hiển thị toàn bộ khách sạn.
+</p>
+
+<div class="code">
+
+Sort(
+    KhachSan,
+    NgayHetHan,
+    Ascending
+)
+
+</div>
+
+<p>
+Khách sạn sắp hết hạn sẽ được hiển thị lên đầu danh sách.
+</p>
+
+<hr>
+
+<h2>Chức Năng Tìm Kiếm</h2>
+
+<div class="code">
+
+Search(
+    KhachSan,
+    txtSearch.Text,
+    TenKhachSan
+)
+
+</div>
+
+<p>
+Cho phép tìm nhanh theo tên khách sạn.
+</p>
+
+<hr>
+
+<h2>Hiển Thị Số Ngày Còn Lại</h2>
+
+<div class="code">
+
+DateDiff(
+    Today(),
+    ThisItem.NgayHetHan
+)
+
+</div>
+
+<p>
+Ví dụ:
+</p>
+
+<table>
+
+<tr>
+<th>Khách Sạn</th>
+<th>Ngày Hết Hạn</th>
+<th>Còn Lại</th>
+</tr>
+
+<tr>
+<td>Khách sạn A</td>
+<td>15/12/2026</td>
+<td>37 ngày</td>
+</tr>
+
+<tr>
+<td>Khách sạn B</td>
+<td>20/11/2026</td>
+<td>12 ngày</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Tô Màu Cảnh Báo</h2>
+
+<p>
+Nếu còn dưới 10 ngày:
+</p>
+
+<div class="code">
+
+If(
+    DateDiff(
+        Today(),
+        ThisItem.NgayHetHan
+    ) <= 10,
+
+    Color.Red,
+
+    Color.Black
+)
+
+</div>
+
+<p>
+Người dùng sẽ dễ dàng nhận ra các hợp đồng sắp hết hạn.
+</p>
+
+<hr>
+
+<h2>Cảnh Báo Trước 10 Ngày</h2>
+
+<p>
+Sử dụng Power Automate Flow.
+</p>
+
+<div class="arch">
+
+Lịch chạy mỗi ngày
+
+↓
+
+Lấy dữ liệu Dataverse
+
+↓
+
+Lọc khách sạn sắp hết hạn
+
+↓
+
+Gửi Email
+
+↓
+
+Gửi Teams
+
+</div>
+
+<h3>Điều Kiện</h3>
+
+<div class="code">
+
+NgayHetHan - HomNay <= 10
+
+</div>
+
+<h3>Email Mẫu</h3>
+
+<div class="code">
+
+Tiêu đề:
+Khách sạn sắp hết hạn
+
+Nội dung:
+
+Tên khách sạn:
+@{TenKhachSan}
+
+Ngày hết hạn:
+@{NgayHetHan}
+
+Số ngày còn lại:
+@{SoNgayConLai}
+
+</div>
+
+<hr>
+
+<h2>Dashboard Quản Lý</h2>
+
+<p>
+Nên hiển thị các KPI sau:
+</p>
+
+<table>
+
+<tr>
+<th>KPI</th>
+<th>Mục Đích</th>
+</tr>
+
+<tr>
+<td>Tổng khách sạn</td>
+<td>Quản lý quy mô</td>
+</tr>
+
+<tr>
+<td>Sắp hết hạn</td>
+<td>Theo dõi rủi ro</td>
+</tr>
+
+<tr>
+<td>Đã hết hạn</td>
+<td>Xử lý khẩn cấp</td>
+</tr>
+
+<tr>
+<td>Gia hạn trong tháng</td>
+<td>Lập kế hoạch</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h2>Mở Rộng Hệ Thống</h2>
+
+<p>
+Sau khi ứng dụng ổn định, có thể mở rộng thêm:
+</p>
+
+<ul>
+
+<li>Đính kèm hợp đồng PDF</li>
+
+<li>Lưu lịch sử gia hạn</li>
+
+<li>Quản lý nhân viên phụ trách</li>
+
+<li>Dashboard Power BI</li>
+
+<li>Kết nối Copilot</li>
+
+<li>Báo cáo tự động qua email</li>
+
+</ul>
+
+<hr>
+
+<h2>Lợi Ích Khi Sử Dụng Power Apps</h2>
+
+<ul>
+
+<li>Không cần lập trình nhiều</li>
+
+<li>Triển khai nhanh</li>
+
+<li>Tích hợp Microsoft 365</li>
+
+<li>Sử dụng trên điện thoại và web</li>
+
+<li>Dễ mở rộng về sau</li>
+
+</ul>
+
+<div class="box">
+
+Mẹo thực tế:
+
+Nếu đang quản lý bằng Excel, bạn có thể import dữ liệu hiện có vào Dataverse rồi xây Power Apps phía trên mà không cần nhập lại từ đầu.
+
+</div>
+
+<hr>
+
+<h2>Kết Luận</h2>
+
+<p>
+Power Apps là lựa chọn phù hợp để xây dựng hệ thống quản lý khách sạn với thời gian triển khai ngắn và chi phí thấp.
+</p>
+
+<p>
+Bằng cách kết hợp Power Apps, Dataverse và Power Automate, doanh nghiệp có thể quản lý tập trung toàn bộ khách sạn, theo dõi ngày hết hạn và tự động gửi cảnh báo trước 10 ngày để tránh bỏ sót hợp đồng.
+</p>
+
+<p>
+Đây cũng là nền tảng tốt để mở rộng thành hệ thống CRM hoặc quản lý hợp đồng toàn diện trong tương lai.
+</p>
+
+</body>
+</html>
